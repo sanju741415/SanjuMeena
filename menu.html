@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eat Non Stop - Food Menu</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            padding: 20px; 
+            background-color: #f8f9fa;
+        }
+        h2 { color: #27ae60; }
+        .menu-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: auto;
+        }
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .menu-item input {
+            margin-right: 10px;
+        }
+        .price {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="number"] {
+            width: 90%;
+            padding: 8px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #218c54;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>🍔 Welcome to Eat Non Stop</h2>
+    <div class="menu-container">
+        <h3>Select Your Food</h3>
+        <form id="orderForm">
+            <div class="menu-item">
+                <label><input type="checkbox" name="item" value="Pizza" data-price="250"> Pizza</label>
+                <span class="price">₹250</span>
+            </div>
+            <div class="menu-item">
+                <label><input type="checkbox" name="item" value="Burger" data-price="150"> Burger</label>
+                <span class="price">₹150</span>
+            </div>
+            <div class="menu-item">
+                <label><input type="checkbox" name="item" value="Pasta" data-price="200"> Pasta</label>
+                <span class="price">₹200</span>
+            </div>
+            <div class="menu-item">
+                <label><input type="checkbox" name="item" value="Fries" data-price="100"> Fries</label>
+                <span class="price">₹100</span>
+            </div>
+            <div class="menu-item">
+                <label><input type="checkbox" name="item" value="Cold Drink" data-price="50"> Cold Drink</label>
+                <span class="price">₹50</span>
+            </div>
+
+            <input type="text" id="customerName" placeholder="Your Name">
+            <input type="number" id="tableNumber" placeholder="Table Number">
+
+            <button type="button" onclick="sendOrder()">🚀 Send Order to WhatsApp</button>
+        </form>
+    </div>
+
+    <script>
+        function sendOrder() {
+            let items = document.querySelectorAll('input[name="item"]:checked');
+            let customerName = document.getElementById("customerName").value;
+            let tableNumber = document.getElementById("tableNumber").value;
+
+            if (items.length === 0 || customerName === "" || tableNumber === "") {
+                alert("❗ Please select at least one item and enter all details.");
+                return;
+            }
+
+            let orderList = "";
+            let totalAmount = 0;
+
+            items.forEach((item) => {
+                let price = item.getAttribute("data-price");
+                totalAmount += parseInt(price);
+                orderList += `🍽 *${item.value}* - ₹${price}\n`;
+            });
+
+            let currentDate = new Date().toLocaleDateString();
+            let currentTime = new Date().toLocaleTimeString();
+
+            let message = encodeURIComponent(
+                `🏨 *Eat Non Stop - Order Confirmation* 🏨\n\n` +
+                `📅 *Date:* ${currentDate}\n` +
+                `🕒 *Order Time:* ${currentTime}\n\n` +
+                `👤 *Customer Name:* ${customerName}\n` +
+                `📍 *Table No:* ${tableNumber}\n\n` +
+                `🍔 *Ordered Items:*\n${orderList}\n` +
+                `💰 *Total Bill:* ₹${totalAmount}\n\n` +
+                `✅ *Status:* Pending ⏳\n\n` +
+                `🎯 *Thank you for ordering at Eat Non Stop! Your delicious food is on the way!* 🚀`
+            );
+
+            let whatsappNumber = "917415140591"; // Apna WhatsApp Number Yaha Dalna
+            let whatsappURL = `https://wa.me/${whatsappNumber}?text=${message}`;
+
+            window.open(whatsappURL, "_blank");
+        }
+    </script>
+
+</body>
+</html>
